@@ -56,28 +56,6 @@ local coinContainers = {
     "Beachresort.CoinContainer"
 }
 
--- Function to glide the character to a target position
-local function glideToPosition(targetPosition, duration)
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local startPosition = humanoidRootPart.Position
-    local startTime = tick()
-
-    local function interpolate(t)
-        local elapsedTime = tick() - startTime
-        local alpha = math.clamp(elapsedTime / duration, 0, 1)
-        local newPosition = startPosition:Lerp(targetPosition, alpha)
-        humanoidRootPart.Position = newPosition
-    end
-
-    while tick() - startTime < duration do
-        interpolate()
-        wait()
-    end
-    humanoidRootPart.Position = targetPosition
-end
-
 -- Main loop to move the character
 local function moveCharacter()
     if isToggled then
@@ -110,9 +88,9 @@ local function moveCharacter()
             end
         end
 
-        -- Glide the character to the nearest part
+        -- Teleport the character to the nearest part
         if nearestPart then
-            glideToPosition(nearestPart.Position, 1) -- Glide duration of 1 second
+            humanoidRootPart.CFrame = nearestPart.CFrame
         end
     end
 end
